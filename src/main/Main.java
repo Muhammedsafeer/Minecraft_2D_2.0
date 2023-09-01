@@ -17,5 +17,8 @@ public class Main {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        GameLoop gameLoop = new GameLoop(gamePanel);
+        gameLoop.startGameThread();
     }
 }
