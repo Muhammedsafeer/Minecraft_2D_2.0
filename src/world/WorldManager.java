@@ -19,7 +19,7 @@ public class WorldManager extends BlockManager {
         this.gp = gp;
         this.keyH = keyH;
 
-        world = new int[gp.maxScreenCol][gp.maxScreenRow];
+        world = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getBlockSprite();
         generateWorld();
@@ -35,8 +35,8 @@ public class WorldManager extends BlockManager {
 
     public void generateLandScapeRight() {
 
-        int x = gp.maxScreenCol / 2;
-        int y = (gp.maxScreenRow / 2) + 2;
+        int x = gp.maxWorldCol / 2;
+        int y = gp.maxScreenRow + 64;
 
         int direction = (int) (Math.random() * directions.length);
         lengthX = (int) (Math.random() * 10) + 2;
@@ -44,7 +44,7 @@ public class WorldManager extends BlockManager {
 
         world[x][y] = 1;
 
-        while (x + 1 < gp.maxScreenCol) {
+        while (x + 1 < gp.maxWorldCol) {
             if (lengthX == 0) {
                 direction = (int) (Math.random() * directions.length);
                 lengthX = (int) (Math.random() * 10) + 2;
@@ -71,8 +71,8 @@ public class WorldManager extends BlockManager {
         System.out.println("Right part of the world generated!");
     }
     public void generateLandScapeLeft() {
-        int x = (gp.maxScreenCol / 2) - 1;
-        int y = (gp.maxScreenRow / 2) + 2;
+        int x = (gp.maxWorldCol / 2) - 1;
+        int y = gp.maxScreenRow + 64;
 
         int direction = (int) (Math.random() * directions.length);
         lengthX = (int) (Math.random() * 10) + 2;
@@ -86,7 +86,7 @@ public class WorldManager extends BlockManager {
                 lengthX = (int) (Math.random() * 10) + 2;
                 lengthY = (int) (Math.random() * 6) + 2;
             }else {
-                if (directions[direction].equals("up") && y + 1 < gp.maxScreenRow && lengthY > 0) {
+                if (directions[direction].equals("up") && y + 1 < gp.maxWorldRow && lengthY > 0) {
                     int upOrStraight = (int) (Math.random() * 2);
                     if (upOrStraight == 1) {
                         y += 1;
@@ -110,8 +110,8 @@ public class WorldManager extends BlockManager {
         int col = 0;
         int row = 0;
 
-        while(col < gp.maxScreenCol) {
-            while(row < gp.maxScreenRow) {
+        while(col < gp.maxWorldCol) {
+            while(row < gp.maxWorldRow) {
                 if (world[col][row] == 1) {
                     world[col][row - 1] = 2;
                 }
@@ -127,9 +127,9 @@ public class WorldManager extends BlockManager {
         int col = 0;
         int row = 0;
 
-        while(col < gp.maxScreenCol) {
-            while(row < gp.maxScreenRow) {
-                if (row + 1 < gp.maxScreenRow && world[col][row] == 1) {
+        while(col < gp.maxWorldCol) {
+            while(row < gp.maxWorldRow) {
+                if (row + 1 < gp.maxWorldRow && world[col][row] == 1) {
                     world[col][row + 1] = 1;
                 }
                 row++;
@@ -143,31 +143,42 @@ public class WorldManager extends BlockManager {
 
     public void update() {
         if (keyH.resetWorld) {
-            world = new int[gp.maxScreenCol][gp.maxScreenRow];
+            world = new int[gp.maxWorldCol][gp.maxWorldRow];
             generateWorld();
             keyH.resetWorld = false;
         }
     }
+    public void getCoordinatesX(int x) {
+
+    }
+    public void getCoordinatesY(int y) {
+
+    }
 
     public void draw(Graphics2D g2d) {
 
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int worldCol = 0;
+        int worldRow = 0;
 
-        while(col < gp.maxScreenCol) {
-            while(row < gp.maxScreenRow) {
+        while (worldCol < gp.maxScreenCol && worldRow < gp.maxWorldRow) {
 
-                g2d.drawImage(block[world[col][row]].image, x, y, gp.tileSize, gp.tileSize, null);
+            int worldX = worldCol * gp.tileSize;
+            int worldY = worldRow * gp.tileSize;
+            double screenX = worldX - gp.player.worldX + gp.player.screenX;
+            double screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-                row++;
-                y += gp.tileSize;
+            if (worldX + (gp.tileSize * 2) > gp.player.worldX - gp.player.screenX &&
+                worldX - (gp.tileSize * 2) < gp.player.worldX + gp.player.screenX &&
+                worldY + (gp.tileSize * 2) > gp.player.worldY - gp.player.screenY &&
+                worldY - (gp.tileSize * 4) < gp.player.worldY + gp.player.screenY) {
+                g2d.drawImage(block[world[worldCol][worldRow]].image, (int)screenX, (int)screenY, gp.tileSize, gp.tileSize, null);
             }
-            col++;
-            x += gp.tileSize;
-            row = 0;
-            y = 0;
+
+            worldCol++;
+            if (worldCol == gp.maxScreenCol) {
+                worldCol = 0;
+                worldRow++;
+            }
         }
     }
 }

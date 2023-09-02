@@ -11,20 +11,28 @@ import java.io.InputStream;
 
 public class Player extends Entity {
 
-    private GamePanel gamePanel;
-    private KeyHandler keyHandler;
+    public GamePanel gamePanel;
+    public  KeyHandler keyHandler;
+
+    public final int screenX;
+    public final int screenY;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+
+        screenX = gamePanel.screenWidth / 2 - 41;
+        screenY = gamePanel.screenHeight / 2 - 83;
+
         setDefaults();
         loadPlayerSprite();
     }
 
     private void setDefaults() {
-        x = 100;
-        y = 100;
-        speed = 4;
+        worldX = 344;
+        worldY = 60 * gamePanel.tileSize;
+//        speed = 4;
+        speed = gamePanel.worldWidth/ 600;
     }
 
     private void loadPlayerSprite() {
@@ -84,6 +92,11 @@ public class Player extends Entity {
         if (keyHandler.upPressed) {
             directionY = "up";
         }
+        //////
+        if (keyHandler.downPressed) {
+            worldY += speed;
+        }
+        //////
         if (!"up".equals(directionY)) {
             directionY = "down";
         }
@@ -106,16 +119,18 @@ public class Player extends Entity {
         }
 
         switch (directionX) {
-            case "left": x -= speed; break;
-            case "right": x += speed; break;
+            case "left": worldX -= speed; break;
+            case "right": worldX += speed; break;
         }
         switch (directionY) {
-            case "up": y -= speed; break;
-            case "down": y += speed; break;
+            case "up": worldY -= speed; break;
+//            case "down": worldY += speed; break;
         }
+
+        System.out.println(worldX + " " + worldY);
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.drawImage(animations[animationCode][animationIndex], x, y, (int) 83.2, (int) 166.4, null);
+        g2d.drawImage(animations[animationCode][animationIndex], screenX, screenY, (int) ((int) gamePanel.tileSize * 1.73), (int) ((int)gamePanel.tileSize * 3.46), null);
     }
 }

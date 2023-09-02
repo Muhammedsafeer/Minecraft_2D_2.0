@@ -13,7 +13,7 @@ public class BlockManager {
 
     public void getBlockSprite() {
 
-        block = new Block[3];
+        block = new Block[4];
 
         try {
 
@@ -25,6 +25,9 @@ public class BlockManager {
 
             block[2] = new Block();
             block[2].image = ImageIO.read(getClass().getResourceAsStream("/minecraft2d/textures/block/grass_block.png"));
+
+            block[3] = new Block();
+            block[3].image = ImageIO.read(getClass().getResourceAsStream("/minecraft2d/textures/block/stone.png"));
 
 
         }catch (IOException e) {
