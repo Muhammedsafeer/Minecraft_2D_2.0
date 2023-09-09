@@ -15,22 +15,22 @@ public class Player extends Entity {
     public  KeyHandler keyHandler;
 
     public final int screenX;
-    public final int screenY;
+    public int screenY;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
         screenX = gamePanel.screenWidth / 2 - 41;
-        screenY = gamePanel.screenHeight / 2 - 83;
+        screenY = 432 / 2 - 50;
 
         setDefaults();
         loadPlayerSprite();
     }
 
     private void setDefaults() {
-        worldX = 344;
-        worldY = 60 * gamePanel.tileSize;
+        worldX = 0 * gamePanel.tileSize;
+        worldY = 0 * gamePanel.tileSize;
 //        speed = 4;
         speed = gamePanel.worldWidth/ 600;
     }
@@ -69,6 +69,10 @@ public class Player extends Entity {
                 animationIndex = 0;
             }
         }
+    }
+
+    public void srollScreen(int i) {
+
     }
 
     public void update() {
@@ -126,8 +130,6 @@ public class Player extends Entity {
             case "up": worldY -= speed; break;
 //            case "down": worldY += speed; break;
         }
-
-        System.out.println(worldX + " " + worldY);
     }
 
     public void draw(Graphics2D g2d) {

@@ -17,10 +17,14 @@ public class GamePanel extends JPanel {
     public int maxScreenRow = 9;
     public int screenWidth = maxScreenCol * tileSize; // 768px
     public int screenHeight = maxScreenRow * tileSize; // 432px
+    public final int maxTileSize = 70;
+    public final int minTileSize = 20;
 
     // WORLD SETTINGS
-    public final int maxWorldChunks = 3;
-    public final int maxWorldCol = maxWorldChunks * 16;
+    public int maxWorldChunks = 3;
+    public final int maxChunkCol = 16;
+    public final int maxChunkRow = 256;
+    public int maxWorldCol = maxWorldChunks * 16;
     public final int maxWorldRow = 256;
     public final int worldWidth = maxWorldCol * tileSize;
     public final int worldHeight = maxWorldRow * tileSize;
@@ -43,9 +47,15 @@ public class GamePanel extends JPanel {
     }
 
     public void zoomInOut(int i) {
+        if (tileSize + i > maxTileSize || tileSize + i < minTileSize) {
+            return;
+        }
+
         int oldWorldWidth = tileSize * maxWorldCol;
         tileSize += i;
         int newWorldWidth = tileSize * maxWorldCol;
+
+        System.out.println("Tile size: " + tileSize);
 
         player.speed = (double)newWorldWidth/600;
 
@@ -57,6 +67,7 @@ public class GamePanel extends JPanel {
         player.worldX = newPlayerWorldX;
         player.worldY = newPlayerWorldY;
     }
+
 
 
     public void update() {
