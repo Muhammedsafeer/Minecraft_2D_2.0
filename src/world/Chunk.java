@@ -5,11 +5,11 @@ import main.GamePanel;
 public class Chunk {
     GamePanel gp;
 
-    int chunk;
+    int chunkNumber;
     String status;
     int[][] blocks = new int[16][256];
-    int rightGrassY;
-    int leftGrassY;
+    int rightGrassHeight;
+    int leftGrassHeight;
     int currentChunkLocation;
     String chunkDirection;
 }
